@@ -21,7 +21,7 @@ public class Ordr {
 	private Member member;
 
 	@OneToMany(mappedBy = "order")
-	private List<OrderItem> orderItemList = new ArrayList<>();
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@OneToOne
 	@JoinColumn(name = "delivery_id")
@@ -31,5 +31,20 @@ public class Ordr {
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
+
+	//#### 연관관계 편의 메소드
+
+	public void setMember(Member member) {
+		this.member = member;
+		member.getOrders().add(this);
+	}
+	public void addOrderItem(OrderItem orderItem) {
+		this.orderItems.add(orderItem);
+		orderItem.setOrder(this);
+	}
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
+		delivery.setOrder(this);
+	}
 
 }

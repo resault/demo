@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.MemberDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,14 +13,25 @@ import java.util.List;
 @NoArgsConstructor
 public class Member {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private Long id;
 
+	@Column(unique = true)
 	private String name;
 
 	@Embedded
-	private Address address;
+	private Address address = new Address();
 
 	@OneToMany(mappedBy = "member")
 	private List<Ordr> orders = new ArrayList<>();
+
+	public Member(MemberDto memberDto) {
+		this.update(memberDto);
+
+	}
+
+	private void update(final MemberDto memberDto) {
+		this.name = memberDto.getName();
+		this.address.update(memberDto.getAddressDto());
+	}
 }
